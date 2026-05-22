@@ -3,7 +3,7 @@
 A machine learning web app that recommends the best crop based on real soil and climate conditions — built as part of my 681-day AI Engineer journey.
 
 ## 🚀 Live Demo
-[Click here to use the app]() ← update after deployment
+https://pakistan-agriculture-advisor-xh4v62v7lp7zlkf5zsqsdn.streamlit.app
 
 ## 🔍 What It Does
 Enter soil and climate values — the app recommends the top 3 crops with confidence scores using a Random Forest model trained on 2200 real agronomic data points.
