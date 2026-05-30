@@ -6,7 +6,6 @@ import shap
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-# Load data and train model
 df = pd.read_csv("Crop_recommendation.csv")
 X = df.drop('label', axis=1)
 y = df['label']
@@ -14,11 +13,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 rf_model = RandomForestClassifier(random_state=42)
 rf_model.fit(X_train, y_train)
 
-# SHAP explainer
 explainer = shap.TreeExplainer(rf_model)
 feature_names = ['Nitrogen', 'Phosphorus', 'Potassium', 'Temperature', 'Humidity', 'pH', 'Rainfall']
 
-# UI
 st.title("🌾 Pakistan Agriculture Advisor")
 st.markdown("Enter your soil and climate conditions to see what your land can grow.")
 
@@ -49,19 +46,17 @@ if st.button("🌱 Recommend Crop"):
         else:
             st.warning(f"🥉 **{crop}** — {confidence:.1f}% confidence")
 
-    # SHAP section
     st.markdown("---")
     top_crop = classes[top3_indices[0]].upper()
     st.markdown(f"### 🔍 Why did the model recommend {top_crop}?")
 
     shap_values = explainer.shap_values(input_df)
-top_class_idx = top3_indices[0]
+    top_class_idx = top3_indices[0]
 
-# Handles both old and new SHAP output formats
-if isinstance(shap_values, list):
-    shap_vals = shap_values[top_class_idx][0]   # old SHAP format
-else:
-    shap_vals = shap_values[0, :, top_class_idx]  # new SHAP format
+    if isinstance(shap_values, list):
+        shap_vals = shap_values[top_class_idx][0]
+    else:
+        shap_vals = shap_values[0, :, top_class_idx]
 
     colors = ['#2ecc71' if v > 0 else '#e74c3c' for v in shap_vals]
 
@@ -78,5 +73,4 @@ else:
 
     st.pyplot(fig)
     plt.close()
-
     st.caption("🟢 Green = pushed toward this crop   |   🔴 Red = pushed against it")
